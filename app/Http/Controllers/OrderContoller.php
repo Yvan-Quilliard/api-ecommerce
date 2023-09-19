@@ -2,62 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Order\StoreOrder;
+use App\Http\Requests\Order\UpdateOrder;
+use App\Models\Order;
+use App\Models\User;
 
 class OrderContoller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $orders = Order::with(['user', 'orderLines'])->get()->all();
+
+        return $this->responseJson($orders);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreOrder $request)
     {
-        //
+        $order = Order::with('user')->with('orderLines')->create($request->all());
+
+        return $this->responseJson($order);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $order = Order::with('user')->with('orderLines')->find($id);
+
+        if ($order) {
+            return $this->responseJson($order);
+        } else {
+            return $this->responseJson(null, 404, 'Order not found');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateOrder $request, $id)
     {
-        //
+        $order = Order::with('user')->with('orderLines')->find($id);
+
+        if (!$order) {
+            return $this->responseJson(null, 404, 'Order not found');
+        }
+
+        $order->update($request->all());
+
+        return $this->responseJson($order);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $order = Order::with('user')->with('orderLines')->find($id);
+
+        if ($order) {
+            $order->delete();
+            return $this->responseJson($order);
+        } else {
+            return $this->responseJson(null, 404, 'Order not found');
+        }
     }
 }

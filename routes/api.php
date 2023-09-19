@@ -4,6 +4,7 @@ use App\Http\Controllers\DeliveryAddressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderContoller;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,4 @@ use App\Http\Controllers\CategoryController;
 
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('delivery_addresses', DeliveryAddressController::class);
+Route::apiResource('orders', OrderContoller::class);
