@@ -27,7 +27,7 @@ class OrderLine extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'order_lines', 'product_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
 }
