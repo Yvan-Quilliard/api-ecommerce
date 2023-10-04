@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DeliveryAddressController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderContoller;
@@ -27,3 +28,4 @@ Route::apiResource('delivery_addresses', DeliveryAddressController::class);
 Route::apiResource('orders', OrderContoller::class);
 Route::apiResource('order_lines', OrderLineController::class);
 Route::apiResource('products', ProductController::class);
+Route::apiResource('product_reviews', ProductReviewController::class);
