@@ -2,62 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use app\Http\Requests\Product\StoreProduct;
+use app\Http\Requests\Product\UpdateProduct;
+use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(): JsonResponse
     {
-        //
+        $products = Product::with('category')->get();
+
+        return $this->respondJson(true, 'Products retrieved successfully', 200, $products);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreProduct $request): JsonResponse
     {
-        //
+        $product = Product::create($request->validated());
+
+        return $this->respondJson(true, 'Product created successfully', 201, $product);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        //
+        $product = Product::with('category')->findOrFail($id);
+
+        return $this->respondJson(true, 'Product retrieved successfully', 200, $product);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateProduct $request, $id): JsonResponse
     {
-        //
+        $product = Product::with('category')->findOrFail($id);
+
+        $product->update($request->validated());
+
+        return $this->respondJson(true, 'Product updated successfully', 200, $product);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        //
+        $product = Product::with('category')->findOrFail($id);
+
+        $product->delete();
+
+        return $this->respondJson(true, 'Product deleted successfully', 200, $product);
     }
 }
