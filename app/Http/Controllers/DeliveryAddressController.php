@@ -5,58 +5,48 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DeliveryAddress\StoreDeliveryAddress;
 use App\Http\Requests\DeliveryAddress\UpdateDeliveryAddress;
 use App\Models\DeliveryAddress;
+use Illuminate\Http\JsonResponse;
 
 class DeliveryAddressController extends Controller
 {
 
-    public function index()
+    public function index(): JsonResponse
     {
-        $delivery_addresses = DeliveryAddress::with('order')->get()->all();
+        $delivery_addresses = DeliveryAddress::with('order')->get();
 
-        return $this->responseJson($delivery_addresses);
-
+        return $this->respondJson(true, 'Delivery Addresses retrieved successfully', 200, $delivery_addresses);
     }
 
-    public function store(StoreDeliveryAddress $request)
+    public function store(StoreDeliveryAddress $request): JsonResponse
     {
-        $delivery_address = DeliveryAddress::with('order')->create($request->all());
+        $delivery_address = DeliveryAddress::create($request->validated());
 
-        return $this->responseJson($delivery_address);
+        return $this->respondJson(true, 'Delivery Address created successfully', 201, $delivery_address);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        $delivery_address = DeliveryAddress::with('order')->find($id);
+        $delivery_address = DeliveryAddress::with('order')->findOrFail($id);
 
-        if ($delivery_address) {
-            return $this->responseJson($delivery_address);
-        } else {
-            return $this->responseJson(null, 404, 'Delivery Address not found');
-        }
+        return $this->respondJson(true, 'Delivery Address retrieved successfully', 200, $delivery_address);
     }
 
-    public function update(UpdateDeliveryAddress $request, $id)
+    public function update(UpdateDeliveryAddress $request, $id): JsonResponse
     {
-        $delivery_address = DeliveryAddress::with('order')->find($id);
+        $delivery_address = DeliveryAddress::with('order')->findOrFail($id);
 
-        if (!$delivery_address) {
-            return $this->responseJson(null, 404, 'Delivery Address not found');
-        }
+        $delivery_address->update($request->validated());
 
-        $delivery_address->update($request->all());
-
-        return $this->responseJson($delivery_address);
+        return $this->respondJson(true, 'Delivery Address updated successfully', 200, $delivery_address);
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        $delivery_address = DeliveryAddress::with('order')->find($id);
+        $delivery_address = DeliveryAddress::with('order')->findOrFail($id);
 
-        if ($delivery_address) {
-            $delivery_address->delete();
-            return $this->responseJson($delivery_address);
-        } else {
-            return $this->responseJson(null, 404, 'Delivery Address not found');
-        }
+        $delivery_address->order()->delete();
+        $delivery_address->delete();
+
+        return $this->respondJson(true, 'Delivery Address deleted successfully', 200, $delivery_address);
     }
 }
