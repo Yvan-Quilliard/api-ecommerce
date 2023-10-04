@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use app\Http\Requests\Product\StoreProduct;
-use app\Http\Requests\Product\UpdateProduct;
+use App\Http\Requests\Product\StoreProduct;
+use App\Http\Requests\Product\UpdateProduct;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
