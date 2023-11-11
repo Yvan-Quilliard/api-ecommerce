@@ -12,7 +12,7 @@ class OrderContoller extends Controller
 
     public function index(): JsonResponse
     {
-        $orders = Order::with('user')->with('orderLines')->get();
+        $orders = Order::with('user')->with('orderLines')->with('deliveryAddress')->get();
 
         return $this->respondJson(true, 'Orders retrieved successfully', 200, $orders);
     }
@@ -26,14 +26,14 @@ class OrderContoller extends Controller
 
     public function show($id): JsonResponse
     {
-        $order = Order::with('user')->with('orderLines')->findOrFail($id);
+        $order = Order::with('user')->with('orderLines')->with('deliveryAddress')->findOrFail($id);
 
         return $this->respondJson(true, 'Order retrieved successfully', 200, $order);
     }
 
     public function update(UpdateOrder $request, $id): JsonResponse
     {
-        $order = Order::with('user')->with('orderLines')->findOrFail($id);
+        $order = Order::with('user')->with('orderLines')->with('deliveryAddress')->findOrFail($id);
 
         $order->update($request->validated());
 

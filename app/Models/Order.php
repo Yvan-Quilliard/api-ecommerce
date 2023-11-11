@@ -23,6 +23,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function deliveryAddress()
+    {
+        return $this->hasOne(DeliveryAddress::class);
+    }
+
     public function orderLines()
     {
         return $this->hasMany(OrderLine::class);
