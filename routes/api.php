@@ -3,6 +3,7 @@
 use App\Http\Controllers\DeliveryAddressController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderContoller;
@@ -19,13 +20,15 @@ use App\Http\Controllers\OrderLineController;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+//create routes for login and register
+Route::post('register', [RegisterController::class, 'register'])->name('register');
+Route::post('login', [RegisterController::class, 'login'])->name('login');
 
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('delivery_addresses', DeliveryAddressController::class);
-Route::apiResource('orders', OrderContoller::class);
-Route::apiResource('order_lines', OrderLineController::class);
-Route::apiResource('products', ProductController::class);
-Route::apiResource('product_reviews', ProductReviewController::class);
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('delivery_addresses', DeliveryAddressController::class);
+    Route::apiResource('orders', OrderContoller::class);
+    Route::apiResource('order_lines', OrderLineController::class);
+    Route::apiResource('products', ProductController::class);
+    Route::apiResource('product_reviews', ProductReviewController::class);
+});
