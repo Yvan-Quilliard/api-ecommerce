@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
-class RegisterController extends Controller
+class AuthController extends Controller
 {
     public function register(Request $request): JsonResponse
     {
@@ -56,8 +55,8 @@ class RegisterController extends Controller
 
             $token = $user->createToken('JWT Authentication Token')->accessToken;
 
-            $rememberToken = Str::random(10);
-            $user->setRememberToken($rememberToken);
+//            $rememberToken = Str::random(10);
+//            $user->setRememberToken($rememberToken);
 
             $user->save();
 
