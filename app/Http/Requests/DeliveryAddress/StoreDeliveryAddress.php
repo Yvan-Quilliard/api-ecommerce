@@ -24,7 +24,6 @@ class StoreDeliveryAddress extends FormRequest
     public function rules()
     {
         return [
-            'order_id' => 'required|integer',
             'recipient_name' => 'required|string|max:255',
             'recipient_phone' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -37,8 +36,6 @@ class StoreDeliveryAddress extends FormRequest
     public function messages()
     {
         return [
-            'order_id.required' => 'Veuillez sélectionner une commande.',
-            'order_id.integer' => 'Veuillez sélectionner une commande valide.',
             'recipient_name.required' => 'Veuillez saisir le nom du destinataire.',
             'recipient_name.string' => 'Le nom du destinataire doit être une chaîne de caractères.',
             'recipient_name.max' => 'Le nom du destinataire ne doit pas dépasser 255 caractères.',
