@@ -43,20 +43,20 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if ($e instanceof ModelNotFoundException) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Resource not found',
-                'data' => []
-            ], 404);
-        }
-
         if($e instanceof AuthenticationException) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthenticated',
                 'data' => []
             ], 401);
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Resource not found',
+                'data' => []
+            ], 404);
         }
 
         return parent::render($request, $e);
