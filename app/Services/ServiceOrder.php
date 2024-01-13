@@ -44,10 +44,9 @@ class ServiceOrder implements OrderInterface
         return response()->json([
             'success' => true,
             'message' => 'Order created successfully',
-            'data' => ['orderLines' => $orderLines, 'user_id' => $user->id, 'order_id' => $order->id, 'delivery_address_id' => $deliveryAddress->id]
+            'data' => $order
         ], 201);
     }
-
 
     private function getProduct($id)
     {

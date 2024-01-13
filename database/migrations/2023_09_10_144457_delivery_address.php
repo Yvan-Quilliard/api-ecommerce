@@ -15,12 +15,15 @@ class DeliveryAddress extends Migration
     {
         Schema::create('delivery_addresses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('recipient_name', 255)->nullable();
             $table->string('recipient_phone', 255)->nullable();
             $table->string('address', 255)->nullable();
             $table->string('postal_code', 255)->nullable();
             $table->string('city', 255)->nullable();
             $table->string('country', 255)->nullable();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

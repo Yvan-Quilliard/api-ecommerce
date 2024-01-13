@@ -18,8 +18,8 @@ class OrderLineFactory extends Factory
     public function definition()
     {
         return [
-            'order_id' => $this->faker->numberBetween(1, 10),
-            'product_id' => $this->faker->numberBetween(1, 10),
+//            'order_id' => $this->faker->numberBetween(1, 10),
+//            'product_id' => $this->faker->numberBetween(1, 10),
             'quantity' => $this->faker->numberBetween(1, 10),
             'price' => $this->faker->randomFloat(2, 1, 250)
         ];

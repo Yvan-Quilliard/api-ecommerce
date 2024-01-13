@@ -20,12 +20,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->count(10)->create();
-        Category::factory()->count(10)->create();
-        Product::factory()->count(10)->create();
-        DeliveryAddress::factory()->count(10)->create();
-        Order::factory()->count(10)->create();
-        OrderLine::factory()->count(10)->create();
-        ProductReview::factory()->count(10)->create();
+        User::factory(10)->has(DeliveryAddress::factory(2))->create();
+
+        Category::factory(3)->has(Product::factory(5))->create();
+
+        Order::factory(10)->has(OrderLine::factory(5)->state(function () {
+            return ['product_id' => Product::inRandomOrder()->first()->id];
+        }))->create()->each(function ($order) {
+            $order->user()->associate(User::inRandomOrder()->first())->save();
+            $order->deliveryAddress()->associate(DeliveryAddress::inRandomOrder()->first())->save();
+        });
+
+        ProductReview::factory(10)->create();
     }
 }

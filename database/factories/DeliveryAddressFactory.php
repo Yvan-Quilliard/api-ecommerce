@@ -24,6 +24,7 @@ class DeliveryAddressFactory extends Factory
             'postal_code' => $this->faker->postcode,
             'city' => $this->faker->city,
             'country' => $this->faker->country,
+//            'user_id' => $this->faker->unique()->numberBetween(1, 10),
         ];
     }
 }

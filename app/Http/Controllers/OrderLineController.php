@@ -12,7 +12,7 @@ class OrderLineController extends Controller
 
     public function index(): JsonResponse
     {
-        $orderLine = OrderLine::with('order')->with('products')->get();
+        $orderLine = OrderLine::with('order')->with('product')->get();
 
         return $this->respondJson(true, 'OrderLines retrieved successfully', 200, $orderLine);
     }
@@ -26,14 +26,14 @@ class OrderLineController extends Controller
 
     public function show($id): JsonResponse
     {
-        $orderLine = OrderLine::with('order')->with('products')->findOrFail($id);
+        $orderLine = OrderLine::with('order')->with('product')->findOrFail($id);
 
         return $this->respondJson(true, 'OrderLine retrieved successfully', 200, $orderLine);
     }
 
     public function update(UpdateOrderLine $request, $id): JsonResponse
     {
-        $orderLine = OrderLine::with('order')->with('products')->findOrFail($id);
+        $orderLine = OrderLine::with('order')->with('product')->findOrFail($id);
 
         $orderLine->update($request->validated());
 
@@ -42,7 +42,7 @@ class OrderLineController extends Controller
 
     public function destroy($id): JsonResponse
     {
-        $orderLine = OrderLine::with('order')->with('products')->findOrFail($id);
+        $orderLine = OrderLine::with('order')->with('product')->findOrFail($id);
 
         $orderLine->delete();
 
