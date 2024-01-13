@@ -18,7 +18,6 @@ class DeliveryAddressFactory extends Factory
     public function definition()
     {
         return [
-            'order_id' => $this->faker->numberBetween(1, 10),
             'recipient_name' => $this->faker->name,
             'recipient_phone' => $this->faker->phoneNumber,
             'address' => $this->faker->address,
