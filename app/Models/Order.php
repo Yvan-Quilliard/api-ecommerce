@@ -14,6 +14,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'delivery_address_id',
         'order_date',
         'status'
     ];
@@ -25,7 +26,7 @@ class Order extends Model
 
     public function deliveryAddress()
     {
-        return $this->hasOne(DeliveryAddress::class);
+        return $this->belongsTo(DeliveryAddress::class);
     }
 
     public function orderLines()
