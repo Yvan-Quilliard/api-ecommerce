@@ -18,7 +18,7 @@ class OrderLine extends Migration
             $table->unsignedBigInteger('order_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->integer('quantity')->nullable();
-            $table->decimal('unit_price')->nullable();
+            $table->decimal('price')->nullable();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products');

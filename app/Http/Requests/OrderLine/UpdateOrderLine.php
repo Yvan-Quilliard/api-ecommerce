@@ -27,7 +27,7 @@ class UpdateOrderLine extends FormRequest
             'order_id' => 'required|integer',
             'product_id' => 'required|integer',
             'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0.01',
+            'price' => 'required|numeric|min:0.01',
         ];
     }
 
@@ -41,9 +41,9 @@ class UpdateOrderLine extends FormRequest
             'quantity.required' => 'Veuillez indiquer la quantité.',
             'quantity.integer' => 'La quantité doit être un nombre entier.',
             'quantity.min' => 'La quantité doit être d\'au moins 1.',
-            'unit_price.required' => 'Veuillez indiquer le prix unitaire.',
-            'unit_price.numeric' => 'Le prix unitaire doit être un nombre.',
-            'unit_price.min' => 'Le prix unitaire doit être d\'au moins 0.01 €.',
+            'price.required' => 'Veuillez indiquer le prix unitaire.',
+            'price.numeric' => 'Le prix unitaire doit être un nombre.',
+            'price.min' => 'Le prix unitaire doit être d\'au moins 0.01 €.',
         ];
     }
 }
