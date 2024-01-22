@@ -18,9 +18,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-//            'user_id' => $this->faker->numberBetween(1, 3),
             'order_date' => $this->faker->dateTimeBetween('-1 year', 'now'),
-//            'delivery_address_id' => $this->faker->numberBetween(1, 3),
             'status' => $this->faker->randomElement(['pending', 'processing', 'completed', 'declined', 'cancelled'])
         ];
     }

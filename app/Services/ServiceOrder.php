@@ -3,29 +3,75 @@
 namespace App\Services;
 
 use App\Interfaces\OrderInterface;
+use App\Jobs\MailNewOrderJob;
+use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderLine;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewOrderMail;
 
 class ServiceOrder implements OrderInterface
 {
 
-    public function createOrder(Request $request)
+    public function createOrder(Request $request): JsonResponse
     {
 
-        $user = json_decode($request->user);
+        $user = $request->user();
         $orderLines = json_decode($request->order_lines);
         $deliveryAddress = json_decode($request->delivery_address);
+
+        try {
+            $deliveryAddress = DeliveryAddress::where('user_id', $user->id)->findOrFail($deliveryAddress->id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Delivery address not found',
+                'data' => [],
+            ], 404);
+        }
+
+        foreach ($orderLines as $orderLine) {
+            if ($orderLine->quantity < 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Quantity must be greater than 0',
+                    'data' => [],
+                ], 400);
+            }
+        }
+
+        foreach ($orderLines as $orderLine) {
+            $product = $this->getProduct($orderLine->product_id);
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found',
+                    'data' => [],
+                ], 404);
+            }
+        }
+
+        foreach ($orderLines as $orderLine) {
+            $price = $this->getProduct($orderLine->product_id)->price;
+            if ($price < 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Price must be greater than 0',
+                    'data' => [],
+                ], 400);
+            }
+        }
 
         $order = Order::create([
             'user_id' => $user->id,
             'delivery_address_id' => $deliveryAddress->id,
             'order_date' => now(),
-            'status' => 'pending',
+            'status' => 'processing',
         ]);
-
 
         foreach ($orderLines as $orderLine) {
 
@@ -36,16 +82,21 @@ class ServiceOrder implements OrderInterface
             OrderLine::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
-                'quantity' => $orderLine->quantity,
-                'price' => $price
+                'quantity' => $quantity,
+                'price' => $price,
             ]);
         }
+
+        $order = Order::with(['orderLines.product', 'deliveryAddress', 'user'])->find($order->id);
+
+        Mail::send(new NewOrderMail($user, $order));
 
         return response()->json([
             'success' => true,
             'message' => 'Order created successfully',
-            'data' => $order
+            'data' => $order,
         ], 201);
+
     }
 
     private function getProduct($id)

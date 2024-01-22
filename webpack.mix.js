@@ -11,7 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
+//import js files and css files from resources folder and compile them to public folder
 mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+    .css('resources/css/app.css', 'public/css')
+    .css('resources/css/mail-new-order.css', 'public/css')
