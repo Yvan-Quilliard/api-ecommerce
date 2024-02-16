@@ -34,5 +34,5 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('delivery_addresses', DeliveryAddressController::class);
     Route::apiResource('orders', OrderContoller::class);
     Route::apiResource('order_lines', OrderLineController::class);
-    Route::get('create_order', [ServiceOrder::class, 'createOrder'])->name('create_order');
+    Route::post('create_order', [ServiceOrder::class, 'createOrder'])->name('create_order');
 });
