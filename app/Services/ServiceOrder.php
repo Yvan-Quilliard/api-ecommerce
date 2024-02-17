@@ -106,14 +106,6 @@ class ServiceOrder implements OrderInterface
     {
         $order = Order::with(['orderLines.product', 'deliveryAddress', 'user'])->findOrFail($id);
 
-//        if (!$order) {
-//            return response()->json([
-//                'success' => false,
-//                'message' => 'Order not found',
-//                'data' => [],
-//            ], 404);
-//        }
-
         $pdf = PDF::setOption('defaultFont', 'Comfortaa-Medium');
         $pdf->loadView('pdf.order-summary', ['order' => $order]);
         return $pdf->stream('order-summary.pdf');

@@ -8,10 +8,6 @@
     <title>Confirmation de commande</title>
     <style>
         {!! file_get_contents(public_path('css/mail-new-order.css')) !!}
-        @font-face {
-            font-family: 'Comfortaa';
-            src: url({{ storage_path('fonts/Comfortaa-Medium.ttf') }});
-        }
     </style>
 </head>
 <body bgcolor="#E8F3FF">
