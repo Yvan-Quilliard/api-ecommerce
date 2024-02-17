@@ -8,9 +8,12 @@ use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderLine;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\FontMetrics;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewOrderMail;
 
@@ -97,6 +100,23 @@ class ServiceOrder implements OrderInterface
             'data' => $order,
         ], 201);
 
+    }
+
+    public function generateOrderSummaryPdf($id): Response
+    {
+        $order = Order::with(['orderLines.product', 'deliveryAddress', 'user'])->findOrFail($id);
+
+//        if (!$order) {
+//            return response()->json([
+//                'success' => false,
+//                'message' => 'Order not found',
+//                'data' => [],
+//            ], 404);
+//        }
+
+        $pdf = PDF::setOption('defaultFont', 'Comfortaa-Medium');
+        $pdf->loadView('pdf.order-summary', ['order' => $order]);
+        return $pdf->stream('order-summary.pdf');
     }
 
     private function getProduct($id)

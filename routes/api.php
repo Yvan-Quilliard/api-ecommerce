@@ -30,9 +30,12 @@ Route::get('categories', [CategoryController::class, 'index'])->name('categories
 Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('products/{product}/reviews', [ProductReviewController::class, 'index'])->name('products.reviews.index');
 
+Route::get('orders/{id}/summary', [ServiceOrder::class, 'generateOrderSummaryPdf'])->name('orders.summary');
+
+
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('delivery_addresses', DeliveryAddressController::class);
     Route::apiResource('orders', OrderContoller::class);
     Route::apiResource('order_lines', OrderLineController::class);
-    Route::post('create_order', [ServiceOrder::class, 'createOrder'])->name('create_order');
+    Route::post('create_order', [ServiceOrder::class, 'createOrder'])->name('create.order');
 });
