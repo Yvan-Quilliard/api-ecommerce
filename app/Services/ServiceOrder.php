@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Interfaces\OrderInterface;
+use App\Jobs\GenerateOrderSummaryPdfJob;
 use App\Jobs\MailNewOrderJob;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
@@ -92,7 +93,11 @@ class ServiceOrder implements OrderInterface
 
         $order = Order::with(['orderLines.product', 'deliveryAddress', 'user'])->find($order->id);
 
-        Mail::send(new NewOrderMail($user, $order));
+
+
+        GenerateOrderSummaryPdfJob::dispatch($order);
+
+//        MailNewOrderJob::dispatch($user, $order);
 
         return response()->json([
             'success' => true,
@@ -107,7 +112,10 @@ class ServiceOrder implements OrderInterface
         $order = Order::with(['orderLines.product', 'deliveryAddress', 'user'])->findOrFail($id);
 
         $pdf = PDF::setOption('defaultFont', 'Comfortaa-Medium');
-        $pdf->loadView('pdf.order-summary', ['order' => $order]);
+        $pdf->loadView('pdf-order-summary', ['order' => $order]);
+
+        //save the pdf to storage
+        $pdf->save(storage_path('app/orders/' . $order->id . '.pdf'));
         return $pdf->stream('order-summary.pdf');
     }
 

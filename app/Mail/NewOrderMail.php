@@ -21,13 +21,21 @@ class NewOrderMail extends Mailable implements ShouldQueue
 
     public function build(): self
     {
-        return $this->to($this->user->email)
+        $mail = $this->to($this->user->email)
             ->subject('Votre commande a bien été prise en compte !')
             ->with([
                 'user' => $this->user,
                 'order' => $this->order
             ])
-            ->view('emails.new-order');
+            ->view('emails.mail-new-order');
+        if (!file_exists(storage_path('app/orders-summary/' . $this->order->id . ' . pdf'))) {
+            $mail->attach(storage_path('app/orders/' . $this->order->id . ' . pdf'), [
+                'as' => 'order_summary . pdf',
+                'mime' => 'application / pdf',
+            ]);
+        }
+
+        return $mail;
     }
 
 }
